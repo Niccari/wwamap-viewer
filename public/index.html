@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>WWAゲーム マップ画像出力ツール</title>
+  <meta http-equiv="Content-Type" content="text/html"; charset="utf-8"/>
+
+  <!-- ogp -->
+  <meta property="og:url" content="https://niccari.net/wwamap/" />
+  <meta property="og:site_name" content="niccari.net" />
+  <meta property="og:title" content="WWAゲーム マップ画像出力ツール" />
+  <meta property="og:description" content="WWAゲームについて、マップ画像を出力するツール" />
+  <meta name="twitter:site" content="niccari" />
+
+  <style type="text/css" media="screen">
+    body { 
+      background-color: #212121;
+      color: #e1e1e1;
+      padding: 8px;
+    }
+
+    .drag-area {
+      border: 1px solid #e1e1e1;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    
+    .label-vertical {
+      display: block;
+    }
+
+    .uploaded {
+      margin-left: 6px;
+      display: none;
+    }
+
+    .input-area {
+      display: flex;
+    }
+
+    .input-area > div {
+      margin-left: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h3>WWAゲーム マップ画像出力ツール ver 0.2</h3>
+  <div>
+    WWAゲームのマップファイル(*.dat)と画像ファイル(*.gif)を指定すると、マップ画像を作成します。ドラッグアンドドロップ可能です。
+  </div>
+  <ul>
+    <li>ver3.10のマップのみ対応しています。古いバージョンの場合、最新の作成ツールで一度上書き保存してください。</li>
+    <li>マップはブラウザ内で出力されます。サーバ等への通信はありません。</li>
+    <li>暗証番号付きマップは対応外です。</li>
+  </ul>
+  <div class="input-area">
+    <div>
+      <label class="label-vertical">マップファイル<span id="dat_uploaded" class="uploaded">- OK</span></label>
+      <input type="file" id="dat_file" class="drag-area">
+    </div>
+    <div>
+      <label class="label-vertical">画像ファイル<span id="gif_uploaded" class="uploaded">- OK</span></label>
+      <input type="file" id="gif_file" class="drag-area">
+    </div>
+  </div>
+  <div id="error_message" style="color: #f64; margin-top: 16px; display: none;"></div>
+  <div id="is_loading" style="margin-top: 16px; display: none;">
+    処理中…
+  </div>
+  <div style="margin-top: 16px;">
+    <a download="map.png" href="" id="gif_map_download">
+      <button id="git_map_download_button" disabled>マップをダウンロードする</button>
+    </a>
+  </div>
+  <canvas id="gif_map_preview" style="max-width: 100%; margin-top: 16px;" ></canvas>
+  <img id="gif_src_preview" style="display: none;" />
+  </body>
+</html>

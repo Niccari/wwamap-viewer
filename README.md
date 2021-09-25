@@ -1,7 +1,9 @@
 # wwamap-viewer
 A tool to output map images for [World Wide Adventure(WWA) games](https://wwajp.com/top.html).
 
-## How do I prepare and test my development environment?
+![Preview i](docs/preview.png)
+
+## Building the development environment
 ```bash
 npm install
 ```

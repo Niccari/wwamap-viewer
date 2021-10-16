@@ -12,6 +12,7 @@ module.exports = {
         'description': { name: 'description', content: 'WWAゲームについて、マップ画像を出力するツール'},
         'keyword': { name: 'keywords', content: 'WWA,マップ画像出力'},
         'og:title': { property: 'og:title', content: 'WWAゲーム マップ画像出力ツール' },
+        'og:site_name': { property: 'og:site_name', content: 'niccari.net' },
         'og:description': { property: 'og:description', content: 'WWAゲームについて、マップ画像を出力するツール' },
         'og:type': { property: 'og:type', content: 'website' },
         'og:url': { property: 'og:url', content: 'https://niccari.net/wwamap/' },

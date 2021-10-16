@@ -1,7 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { merge } = require('webpack-merge')
+const web = require('./webpack.web');
 
-module.exports = {
+module.exports = merge(web, {
   mode: 'development',
   entry: './src/index.ts',
   output: {
@@ -21,13 +23,4 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      minify: {
-        collapseWhitespace: true,
-        minifyCSS: true,
-      }
-    })
-  ]
-};
+});

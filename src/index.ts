@@ -1,10 +1,10 @@
-import { sleepMs } from "./libs/sleep";
+import sleepMs from "./libs/sleep";
 import { ImageInfo } from "./models/imageInfo";
 import { MapInfo } from "./models/mapInfo";
-import { DataLoader } from "./modules/data";
-import { FileLoader } from "./modules/file";
-import { ImageLoader } from "./modules/image";
-import { Presenter } from "./presentation";
+import DataLoader from "./modules/data";
+import FileLoader from "./modules/file";
+import ImageLoader from "./modules/image";
+import Presenter from "./presentation";
 import { ErrorCode } from "./presentation/interface";
 import { View } from "./view";
 import { TagId } from "./view/interface";
@@ -21,6 +21,32 @@ const presenter = new Presenter();
 const state: State = {
   mapInfo: undefined,
   imageInfo: undefined,
+};
+const view = new View();
+
+const updateView = async () => {
+  const { imageInfo, mapInfo } = state;
+  const isMapUploaded = mapInfo !== undefined;
+  const isGifUploaded = imageInfo !== undefined;
+  const isMapReady = isMapUploaded && isGifUploaded;
+
+  view.showIfNeeded(TagId.LOADING, true);
+  view.showIfNeeded(TagId.MAP_UPLOADED, isMapUploaded);
+  view.showIfNeeded(TagId.GIF_UPLOADED, isGifUploaded);
+  if (isMapReady) {
+    // ローディング表示を確実に入れるため一時待機
+    await sleepMs(50);
+    await view.showMap(mapInfo);
+  }
+  view.showIfNeeded(TagId.LOADING, false);
+  view.enableDownloadButton(isMapReady);
+};
+
+const updateState = (newState: State) => {
+  state.imageInfo = newState.imageInfo;
+  state.mapInfo = newState.mapInfo;
+
+  updateView();
 };
 
 const onGifFileSet = async (file: File) => {
@@ -52,29 +78,4 @@ const onDataFileSet = async (file: File) => {
   });
 };
 
-const view = new View(onGifFileSet, onDataFileSet);
-
-const updateState = (newState: State) => {
-  state.imageInfo = newState.imageInfo;
-  state.mapInfo = newState.mapInfo;
-
-  updateView();
-};
-
-const updateView = async () => {
-  const { imageInfo, mapInfo } = state;
-  const isMapUploaded = mapInfo !== undefined;
-  const isGifUploaded = imageInfo !== undefined;
-  const isMapReady = isMapUploaded && isGifUploaded;
-
-  view.showIfNeeded(TagId.LOADING, true);
-  view.showIfNeeded(TagId.MAP_UPLOADED, isMapUploaded);
-  view.showIfNeeded(TagId.GIF_UPLOADED, isGifUploaded);
-  if (isMapReady) {
-    // ローディング表示を確実に入れるため一時待機
-    await sleepMs(50);
-    await view.showMap(mapInfo);
-  }
-  view.showIfNeeded(TagId.LOADING, false);
-  view.enableDownloadButton(isMapReady);
-};
+view.addEvents(onGifFileSet, onDataFileSet);

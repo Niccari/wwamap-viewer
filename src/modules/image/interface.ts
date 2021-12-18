@@ -1,3 +1,3 @@
 export interface IImageLoader {
-  loadDataUrlAsync(file: File, type: string): Promise<string>;
+  loadDataUrlAsync: (file: File, type: string) => Promise<string>;
 }

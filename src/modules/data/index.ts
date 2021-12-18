@@ -4,52 +4,51 @@ import { IFileLoader } from "../file/interface";
 
 type BufferLoader = (position: number) => number;
 
-export class DataLoader implements IDataLoader {
+class DataLoader implements IDataLoader {
   private fileLoader: IFileLoader;
 
-  constructor(fileLoader: IFileLoader) {
+  public constructor(fileLoader: IFileLoader) {
     this.fileLoader = fileLoader;
   }
 
-  async loadAsync(file: File): Promise<MapInfo> {
+  public loadAsync = async (file: File): Promise<MapInfo> => {
     const buffer = await this.fileLoader.loadAsync(file, "");
     if (typeof buffer === "string") {
-      return this.parseDataAsync(buffer);
-    } else {
-      return Promise.reject("Unsupported return type");
+      return DataLoader.parseDataAsync(buffer);
     }
-  }
+    return Promise.reject(new Error("Unsupported return type"));
+  };
 
-  private decode(result: string): string {
+  private static decode = (result: string): string => {
     let tmp = "";
     let k = 0;
 
-    for (let i = 0; i < result.length - 3; i++) {
-      if (result.charCodeAt(k) == result.charCodeAt(k + 1)) {
+    for (let i = 0; i < result.length - 3; i += 1) {
+      if (result.charCodeAt(k) === result.charCodeAt(k + 1)) {
         const numRepeat = result.charCodeAt(k + 2) + 1;
-        for (let j = 0; j < numRepeat; ++j) {
+        for (let j = 0; j < numRepeat; j += 1) {
           tmp += result[k];
         }
-        k = k + 3;
+        k += 3;
       } else {
         tmp += result[k];
-        k = k + 1;
+        k += 1;
       }
     }
     return tmp;
-  }
+  };
 
-  private loadWord(buffer: string): BufferLoader {
+  private static loadWord = (buffer: string): BufferLoader => {
     return (position: number) => {
       return buffer.charCodeAt(position) + buffer.charCodeAt(position + 1) * 256;
     };
-  }
+  };
 
-  private parseMapItem(position: number, sizeMap: number, bufferLoader: BufferLoader): MapItem[][] {
+  private static parseMapItem = (position: number, sizeMap: number, bufferLoader: BufferLoader): MapItem[][] => {
     const map: MapItem[][] = [];
-    for (let y = 0; y < sizeMap; y++) {
+    for (let y = 0; y < sizeMap; y += 1) {
       map[y] = [];
-      for (let x = 0; x < sizeMap; x++) {
+      for (let x = 0; x < sizeMap; x += 1) {
         const positionBg = position + 2 * (x + y * sizeMap);
         const positionObj = positionBg + 2 * (sizeMap * sizeMap);
         map[y][x] = {
@@ -59,24 +58,29 @@ export class DataLoader implements IDataLoader {
       }
     }
     return map;
-  }
+  };
 
-  private parseAttrs(position: number, attrMax: number, NumBg: number, bufferLoader: BufferLoader): number[][] {
+  private static parseAttrs = (
+    position: number,
+    attrMax: number,
+    NumBg: number,
+    bufferLoader: BufferLoader
+  ): number[][] => {
     const attrs: number[][] = [];
-    for (let y = 0; y < NumBg; y++) {
+    for (let y = 0; y < NumBg; y += 1) {
       attrs[y] = [];
-      for (let x = 0; x < attrMax; x++) {
+      for (let x = 0; x < attrMax; x += 1) {
         attrs[y][x] = bufferLoader(position + 2 * (x + y * attrMax));
       }
     }
     return attrs;
-  }
+  };
 
-  private validateSize(sizeMap: number, numBg: number, numObj: number): boolean {
+  private static validateSize = (sizeMap: number, numBg: number, numObj: number): boolean => {
     return sizeMap <= 501 || numBg <= 200 || numObj <= 200;
-  }
+  };
 
-  private async parseDataAsync(buffer: string): Promise<MapInfo> {
+  private static parseDataAsync = async (buffer: string): Promise<MapInfo> => {
     // datファイルのデータ位置(変数名はWinWwamk.cppより)
     const DATA_CHECK = 0; // チェック用正誤番号
     const DATA_VERSION = 2; // データver.
@@ -101,23 +105,23 @@ export class DataLoader implements IDataLoader {
 
     const DATA_BYTES = 2;
 
-    const decodedBuffer = this.decode(buffer);
-    const bufferLoader = this.loadWord(decodedBuffer);
+    const decodedBuffer = DataLoader.decode(buffer);
+    const bufferLoader = DataLoader.loadWord(decodedBuffer);
 
     const sizeMap = bufferLoader(DATA_MAP_SIZE);
     const numBg = bufferLoader(DATA_BG_COUNT);
     const numObj = bufferLoader(DATA_OBJ_COUNT);
-    if (!this.validateSize(sizeMap, numBg, numObj)) {
-      return Promise.reject("Invalid data size!");
+    if (!DataLoader.validateSize(sizeMap, numBg, numObj)) {
+      return Promise.reject(new Error("Invalid data size!"));
     }
 
     // DATA_MAP_BG_STARTからみて、物体パーツと背景パーツの後からが物体属性データ
     const mapBgAttrStart = DATA_MAP_BG_START + 2 * DATA_BYTES * (sizeMap * sizeMap);
     const mapObjAttrStart = mapBgAttrStart + DATA_BYTES * (BG_ATTR_MAX * numBg);
 
-    const map = this.parseMapItem(DATA_MAP_BG_START, sizeMap, bufferLoader);
-    const bgAttrs = this.parseAttrs(mapBgAttrStart, BG_ATTR_MAX, numBg, bufferLoader);
-    const objAttrs = this.parseAttrs(mapObjAttrStart, OBJ_ATTR_MAX, numObj, bufferLoader);
+    const map = DataLoader.parseMapItem(DATA_MAP_BG_START, sizeMap, bufferLoader);
+    const bgAttrs = DataLoader.parseAttrs(mapBgAttrStart, BG_ATTR_MAX, numBg, bufferLoader);
+    const objAttrs = DataLoader.parseAttrs(mapObjAttrStart, OBJ_ATTR_MAX, numObj, bufferLoader);
 
     // アイテムは1Byteずつ
     const items = Array.from(Array(12).keys()).map((i) => {
@@ -145,5 +149,7 @@ export class DataLoader implements IDataLoader {
       bgAttrs,
       objAttrs,
     };
-  }
+  };
 }
+
+export default DataLoader;

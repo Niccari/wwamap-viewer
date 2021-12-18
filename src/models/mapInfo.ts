@@ -1,7 +1,8 @@
-export enum MapAttribute {
-  x = 6,
-  y = 7,
-}
+export const MapAttribute = {
+  x: 6,
+  y: 7,
+} as const;
+export type MapAttribute = typeof MapAttribute[keyof typeof MapAttribute];
 
 export interface MapItem {
   obj: number;

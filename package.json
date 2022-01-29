@@ -31,5 +31,17 @@
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.7.3",
     "webpack-merge": "^5.8.0"
+  },
+  "browserslist": {
+    "production": [
+      "> 0.5%",
+      "not dead",
+      "not ie 11"
+    ],
+    "development": [
+      "> 0.5%",
+      "not dead",
+      "not ie 11"
+    ]
   }
 }

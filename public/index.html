@@ -39,34 +39,40 @@
 </head>
 <body>
   <h3>WWAゲーム マップ画像出力ツール ver 0.2</h3>
-  <div>
-    <a href="https://wwajp.com/" target="_blank" rel="noopener noreferer">WWAゲーム</a>のマップファイル(*.dat)と画像ファイル(*.gif)を指定すると、マップ画像を作成します。ドラッグアンドドロップ可能です。
-  </div>
-  <ul>
-    <li>ver3.10のマップのみ対応しています。古いバージョンの場合、最新の作成ツールで一度上書き保存してください。</li>
-    <li>マップはブラウザ内で出力されます。サーバ等への通信はありません。</li>
-    <li>暗証番号付きマップは対応外です。</li>
-  </ul>
-  <div class="input-area">
+  <noscript>
+    <style type="text/css">.app { display: none; } </style>
+    <p>このソフトを利用する際は、JavaScriptを有効にするか、JavaScriptをサポートしているブラウザに切り替えてください。</p>
+  </noscript>
+  <div class="app">
     <div>
-      <label class="label-vertical">マップファイル<span id="dat_uploaded" class="uploaded">- OK</span></label>
-      <input type="file" id="dat_file" class="drag-area">
+      <a href="https://wwajp.com/" target="_blank" rel="noopener noreferer">WWAゲーム</a>のマップファイル(*.dat)と画像ファイル(*.gif)を指定すると、マップ画像を作成します。ドラッグアンドドロップ可能です。
     </div>
-    <div>
-      <label class="label-vertical">画像ファイル<span id="gif_uploaded" class="uploaded">- OK</span></label>
-      <input type="file" id="gif_file" class="drag-area">
+    <ul>
+      <li>ver3.10のマップのみ対応しています。古いバージョンの場合、最新の作成ツールで一度上書き保存してください。</li>
+      <li>マップはブラウザ内で出力されます。サーバ等への通信はありません。</li>
+      <li>暗証番号付きマップは対応外です。</li>
+    </ul>
+    <div class="input-area">
+      <div>
+        <label class="label-vertical">マップファイル<span id="dat_uploaded" class="uploaded">- OK</span></label>
+        <input type="file" id="dat_file" class="drag-area">
+      </div>
+      <div>
+        <label class="label-vertical">画像ファイル<span id="gif_uploaded" class="uploaded">- OK</span></label>
+        <input type="file" id="gif_file" class="drag-area">
+      </div>
+      </div>
+      <div id="error_message" style="color: #f64; margin-top: 16px; display: none;"></div>
+      <div id="is_loading" style="margin-top: 16px; display: none;">
+        処理中…
+      </div>
+      <div style="margin-top: 16px;">
+        <a download="map.png" href="" id="gif_map_download">
+          <button id="git_map_download_button" disabled>マップをダウンロードする</button>
+        </a>
+      </div>
+      <canvas id="gif_map_preview" style="max-width: 100%; margin-top: 16px;" ></canvas>
+      <img id="gif_src_preview" style="display: none;" />
     </div>
-  </div>
-  <div id="error_message" style="color: #f64; margin-top: 16px; display: none;"></div>
-  <div id="is_loading" style="margin-top: 16px; display: none;">
-    処理中…
-  </div>
-  <div style="margin-top: 16px;">
-    <a download="map.png" href="" id="gif_map_download">
-      <button id="git_map_download_button" disabled>マップをダウンロードする</button>
-    </a>
-  </div>
-  <canvas id="gif_map_preview" style="max-width: 100%; margin-top: 16px;" ></canvas>
-  <img id="gif_src_preview" style="display: none;" />
   </body>
 </html>

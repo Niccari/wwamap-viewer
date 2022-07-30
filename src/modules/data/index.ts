@@ -38,11 +38,10 @@ class DataLoader implements IDataLoader {
     return tmp;
   };
 
-  private static loadWord = (buffer: string): BufferLoader => {
-    return (position: number) => {
-      return buffer.charCodeAt(position) + buffer.charCodeAt(position + 1) * 256;
-    };
-  };
+  private static loadWord =
+    (buffer: string): BufferLoader =>
+    (position: number) =>
+      buffer.charCodeAt(position) + buffer.charCodeAt(position + 1) * 256;
 
   private static parseMapItem = (position: number, sizeMap: number, bufferLoader: BufferLoader): MapItem[][] => {
     const map: MapItem[][] = [];
@@ -64,7 +63,7 @@ class DataLoader implements IDataLoader {
     position: number,
     attrMax: number,
     NumBg: number,
-    bufferLoader: BufferLoader
+    bufferLoader: BufferLoader,
   ): number[][] => {
     const attrs: number[][] = [];
     for (let y = 0; y < NumBg; y += 1) {
@@ -76,9 +75,8 @@ class DataLoader implements IDataLoader {
     return attrs;
   };
 
-  private static validateSize = (sizeMap: number, numBg: number, numObj: number): boolean => {
-    return sizeMap <= 501 || numBg <= 200 || numObj <= 200;
-  };
+  private static validateSize = (sizeMap: number, numBg: number, numObj: number): boolean =>
+    sizeMap <= 501 || numBg <= 200 || numObj <= 200;
 
   private static parseDataAsync = async (buffer: string): Promise<MapInfo> => {
     // datファイルのデータ位置(変数名はWinWwamk.cppより)
@@ -124,9 +122,7 @@ class DataLoader implements IDataLoader {
     const objAttrs = DataLoader.parseAttrs(mapObjAttrStart, OBJ_ATTR_MAX, numObj, bufferLoader);
 
     // アイテムは1Byteずつ
-    const items = Array.from(Array(12).keys()).map((i) => {
-      return bufferLoader(DATA_ITEM + i) % 256;
-    });
+    const items = Array.from(Array(12).keys()).map((i) => bufferLoader(DATA_ITEM + i) % 256);
 
     return {
       check: bufferLoader(DATA_CHECK),

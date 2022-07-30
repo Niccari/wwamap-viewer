@@ -87,7 +87,7 @@ export class View implements IView {
             x * IMAGE_UNIT_WIDTH_PX,
             y * IMAGE_UNIT_WIDTH_PX,
             IMAGE_UNIT_WIDTH_PX,
-            IMAGE_UNIT_WIDTH_PX
+            IMAGE_UNIT_WIDTH_PX,
           );
           if (objX !== 0 || objY !== 0) {
             context.drawImage(
@@ -99,7 +99,7 @@ export class View implements IView {
               x * IMAGE_UNIT_WIDTH_PX,
               y * IMAGE_UNIT_WIDTH_PX,
               IMAGE_UNIT_WIDTH_PX,
-              IMAGE_UNIT_WIDTH_PX
+              IMAGE_UNIT_WIDTH_PX,
             );
           }
         }
@@ -113,8 +113,8 @@ export class View implements IView {
   };
 
   // eslint-disable-next-line class-methods-use-this
-  public showGif = async (dataUrl: string): Promise<ImageInfo> => {
-    return new Promise((resolve, reject) => {
+  public showGif = async (dataUrl: string): Promise<ImageInfo> =>
+    new Promise((resolve, reject) => {
       const img = View.fetchImageTag();
       if (!img) {
         reject();
@@ -129,7 +129,6 @@ export class View implements IView {
       };
       img.src = dataUrl;
     });
-  };
 
   private static getCanvasById = (id: string): HTMLCanvasElement | null => {
     const canvas = document.getElementById(id);

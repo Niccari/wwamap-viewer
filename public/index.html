@@ -7,7 +7,7 @@
   <link rel="icon" href="./favicon.ico"/>
 
   <style type="text/css" media="screen">
-    body { 
+    body {
       background-color: #212121;
       color: #e1e1e1;
       padding: 8px;
@@ -18,7 +18,7 @@
       padding: 8px;
       border-radius: 4px;
     }
-    
+
     .label-vertical {
       display: block;
     }
@@ -51,6 +51,7 @@
       <li>ver3.10のマップのみ対応しています。古いバージョンの場合、最新の作成ツールで一度上書き保存してください。</li>
       <li>マップはブラウザ内で出力されます。サーバ等への通信はありません。</li>
       <li>暗証番号付きマップは対応外です。</li>
+      <li>※ 画像を保存する場合、PCであれば画像を右クリック、スマホであれば画像をタップ長押しして保存できます。</li>
     </ul>
     <div class="input-area">
       <div>
@@ -65,11 +66,6 @@
       <div id="error_message" style="color: #f64; margin-top: 16px; display: none;"></div>
       <div id="is_loading" style="margin-top: 16px; display: none;">
         処理中…
-      </div>
-      <div style="margin-top: 16px;">
-        <a download="map.png" href="" id="gif_map_download">
-          <button id="git_map_download_button" disabled>マップをダウンロードする</button>
-        </a>
       </div>
       <canvas id="gif_map_preview" style="max-width: 100%; margin-top: 16px;" ></canvas>
       <img id="gif_src_preview" style="display: none;" />

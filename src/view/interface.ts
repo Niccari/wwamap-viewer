@@ -12,7 +12,6 @@ export interface IView {
   addEvents(onGifFileSet: (file: File) => void, onDataFileSet: (file: File) => void): void;
   showMap(map: MapInfo): Promise<void>;
   showGif(dataUrl: string): Promise<ImageInfo>;
-  enableDownloadButton(isEnable: boolean): void;
   showIfNeeded(id: TagId, isShow: boolean): void;
   showError(message: string): Promise<void>;
 }

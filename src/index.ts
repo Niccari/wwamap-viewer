@@ -39,7 +39,6 @@ const updateView = async () => {
     await view.showMap(mapInfo);
   }
   view.showIfNeeded(TagId.LOADING, false);
-  view.enableDownloadButton(isMapReady);
 };
 
 const updateState = (newState: State) => {

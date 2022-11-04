@@ -15,8 +15,6 @@ export const HtmlDefines = {
   ERROR_MESSAGE: "error_message",
 
   CANVAS_GIF_MAP_PREVIEW: "gif_map_preview",
-  GIF_MAP_DOWNLOAD: "gif_map_download",
-  GIF_MAP_DOWNLOAD_BUTTON: "git_map_download_button",
 } as const;
 export type HtmlDefines = typeof HtmlDefines[keyof typeof HtmlDefines];
 
@@ -55,7 +53,7 @@ export class View implements IView {
     if (!img || !canvas) {
       return;
     }
-    const context = canvas.getContext("2d");
+    const context = canvas.getContext("2d", { alpha: false });
     if (!context) {
       return;
     }
@@ -105,11 +103,6 @@ export class View implements IView {
         }
       }
     }
-
-    const downloadLink = document.getElementById(HtmlDefines.GIF_MAP_DOWNLOAD);
-    if (downloadLink) {
-      (downloadLink as HTMLLinkElement).href = canvas.toDataURL();
-    }
   };
 
   // eslint-disable-next-line class-methods-use-this
@@ -136,15 +129,6 @@ export class View implements IView {
       return null;
     }
     return canvas as HTMLCanvasElement;
-  };
-
-  // eslint-disable-next-line class-methods-use-this
-  public enableDownloadButton = (isEnable: boolean): void => {
-    const button = document.getElementById(HtmlDefines.GIF_MAP_DOWNLOAD_BUTTON);
-    if (!button) {
-      return;
-    }
-    (button as HTMLButtonElement).disabled = !isEnable;
   };
 
   private static resolveTag = (id: TagId): string => {

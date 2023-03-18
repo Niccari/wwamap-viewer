@@ -5,7 +5,7 @@ export const ErrorCode = {
   DataLoadFailed: 1,
   ImageLoadFailed: 2,
 } as const;
-export type ErrorCode = typeof ErrorCode[keyof typeof ErrorCode];
+export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
 
 export interface IPresenter {
   showMapInfo(info: MapInfo): string[];

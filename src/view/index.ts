@@ -16,7 +16,7 @@ export const HtmlDefines = {
 
   CANVAS_GIF_MAP_PREVIEW: "gif_map_preview",
 } as const;
-export type HtmlDefines = typeof HtmlDefines[keyof typeof HtmlDefines];
+export type HtmlDefines = (typeof HtmlDefines)[keyof typeof HtmlDefines];
 
 export class View implements IView {
   // eslint-disable-next-line class-methods-use-this

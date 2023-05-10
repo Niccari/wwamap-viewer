@@ -1,9 +1,8 @@
 import sleepMs from "./libs/sleep";
 import { ImageInfo } from "./models/imageInfo";
 import { MapInfo } from "./models/mapInfo";
-import DataLoader from "./modules/data";
-import FileLoader from "./modules/file";
-import ImageLoader from "./modules/image";
+import { loadMapInfoAsync } from "./modules/dataLoader";
+import { loadImageUrlAsync } from "./modules/imageLoader";
 import Presenter from "./presentation";
 import { ErrorCode } from "./presentation/interface";
 import { View } from "./view";
@@ -14,9 +13,6 @@ interface State {
   imageInfo?: ImageInfo;
 }
 
-const fileLoader = new FileLoader();
-const dataLoader = new DataLoader(fileLoader);
-const imageLoader = new ImageLoader(fileLoader);
 const presenter = new Presenter();
 const state: State = {
   mapInfo: undefined,
@@ -49,7 +45,7 @@ const updateState = (newState: State) => {
 };
 
 const onGifFileSet = async (file: File) => {
-  const dataUrl = await imageLoader.loadDataUrlAsync(file).catch(() => {
+  const dataUrl = await loadImageUrlAsync(file).catch(() => {
     const message = presenter.resolveErrorMessage(ErrorCode.ImageLoadFailed);
     view.showError(message);
   });
@@ -64,7 +60,7 @@ const onGifFileSet = async (file: File) => {
 };
 
 const onDataFileSet = async (file: File) => {
-  const mapInfo = await dataLoader.loadAsync(file).catch(() => {
+  const mapInfo = await loadMapInfoAsync(file).catch(() => {
     const message = presenter.resolveErrorMessage(ErrorCode.DataLoadFailed);
     view.showError(message);
   });

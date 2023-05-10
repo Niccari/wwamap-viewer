@@ -1,7 +1,7 @@
 {
   "name": "wwamap-viewer",
   "description": "A tool to output map images for World Wide Adventure(WWA) games.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "dist/index.js",
   "scripts": {
     "start": "webpack-dev-server -d source-map",

@@ -1,7 +1,6 @@
 import { parseDataAsync } from "./dataLoader";
 
 // ignore prettier format
-
 test("parse data", () => {
   const mapSize = 4;
   const numBg = 4;

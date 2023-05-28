@@ -32,10 +32,9 @@ export class View implements IView {
     }
     const retrieveFile = (e: Event): void => {
       const files = (e.target as HTMLInputElement | null)?.files;
-      if (!files) {
-        return;
+      if (files && files[0]) {
+        onFileRetrieved(files[0]);
       }
-      onFileRetrieved(files[0]);
     };
     tag.addEventListener("change", retrieveFile);
     tag.addEventListener("dragstart", retrieveFile);
@@ -64,10 +63,10 @@ export class View implements IView {
 
     const { map } = info;
 
-    for (let y = 0; y < sizeMap; y += 1) {
-      for (let x = 0; x < sizeMap; x += 1) {
-        const { bg } = map[y][x];
-        const { obj } = map[y][x];
+    map.forEach((yArray, y) => {
+      yArray.forEach((item, x) => {
+        const { bg } = item;
+        const { obj } = item;
 
         const bgAttr = info.bgAttrs[bg];
         const objAttr = info.objAttrs[obj];
@@ -76,22 +75,16 @@ export class View implements IView {
           const bgY = bgAttr[MapAttribute.y];
           const objX = objAttr[MapAttribute.x];
           const objY = objAttr[MapAttribute.y];
-          context.drawImage(
-            img,
-            bgX,
-            bgY,
-            IMAGE_UNIT_WIDTH_PX,
-            IMAGE_UNIT_WIDTH_PX,
-            x * IMAGE_UNIT_WIDTH_PX,
-            y * IMAGE_UNIT_WIDTH_PX,
-            IMAGE_UNIT_WIDTH_PX,
-            IMAGE_UNIT_WIDTH_PX,
-          );
-          if (objX !== 0 || objY !== 0) {
+          if (
+            typeof bgX === "number" &&
+            typeof bgY === "number" &&
+            typeof objX === "number" &&
+            typeof objY === "number"
+          ) {
             context.drawImage(
               img,
-              objX,
-              objY,
+              bgX,
+              bgY,
               IMAGE_UNIT_WIDTH_PX,
               IMAGE_UNIT_WIDTH_PX,
               x * IMAGE_UNIT_WIDTH_PX,
@@ -99,10 +92,23 @@ export class View implements IView {
               IMAGE_UNIT_WIDTH_PX,
               IMAGE_UNIT_WIDTH_PX,
             );
+            if (objX !== 0 || objY !== 0) {
+              context.drawImage(
+                img,
+                objX,
+                objY,
+                IMAGE_UNIT_WIDTH_PX,
+                IMAGE_UNIT_WIDTH_PX,
+                x * IMAGE_UNIT_WIDTH_PX,
+                y * IMAGE_UNIT_WIDTH_PX,
+                IMAGE_UNIT_WIDTH_PX,
+                IMAGE_UNIT_WIDTH_PX,
+              );
+            }
           }
         }
-      }
-    }
+      });
+    });
   };
 
   // eslint-disable-next-line class-methods-use-this

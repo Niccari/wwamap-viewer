@@ -11,47 +11,42 @@ const decompressMapHex = (result: number[]): number[] => {
   for (let k = 0; k < result.length - 2; ) {
     const current = result[k];
     const next = result[k + 1];
-    if (current === next) {
-      const numRepeat = result[k + 2] + 1;
-      rawArray.push(...Array(numRepeat).fill(current));
-      k += 3;
-    } else {
-      rawArray.push(current);
-      k += 1;
+    const numRepeat = result[k + 2];
+    if (typeof current === "number" && typeof next === "number" && typeof numRepeat === "number") {
+      if (current === next) {
+        rawArray.push(...Array(numRepeat + 1).fill(current));
+        k += 3;
+      } else {
+        rawArray.push(current);
+        k += 1;
+      }
     }
   }
   rawArray.push(...result.slice(result.length - 2));
   return rawArray;
 };
 
-const loadLittleEndianWord = (buffer: number[]) => (position: number) => buffer[position] + buffer[position + 1] * 256;
-
-const parseMapItem = (position: number, sizeMap: number, bufferLoader: BufferLoader): MapItem[][] => {
-  const map: MapItem[][] = [];
-  for (let y = 0; y < sizeMap; y += 1) {
-    map[y] = [];
-    for (let x = 0; x < sizeMap; x += 1) {
-      const positionBg = position + 2 * (x + y * sizeMap);
-      const positionObj = positionBg + 2 * (sizeMap * sizeMap);
-      map[y][x] = {
-        obj: bufferLoader(positionObj),
-        bg: bufferLoader(positionBg),
-      };
-    }
+const loadLittleEndianWord = (buffer: number[]) => (position: number) => {
+  const low = buffer[position];
+  const high = buffer[position + 1];
+  if (typeof low === "number" && typeof high === "number") {
+    return low + high * 256;
   }
-  return map;
+  throw new Error(`invalid position: ${position}`);
 };
 
-const parseAttrs = (position: number, attrMax: number, NumBg: number, bufferLoader: BufferLoader): number[][] => {
-  const attrs: number[][] = [];
-  for (let y = 0; y < NumBg; y += 1) {
-    attrs[y] = [];
-    for (let x = 0; x < attrMax; x += 1) {
-      attrs[y][x] = bufferLoader(position + 2 * (x + y * attrMax));
-    }
-  }
-  return attrs;
-};
+const parseMapItem = (position: number, sizeMap: number, bufferLoader: BufferLoader): MapItem[][] =>
+  new Array(sizeMap).fill(0).map((_, y) =>
+    new Array(sizeMap).fill(0).map((__, x) => ({
+      bg: bufferLoader(position + 2 * (x + y * sizeMap)),
+      obj: bufferLoader(position + 2 * (x + y * sizeMap + sizeMap * sizeMap)),
+    })),
+  );
+
+const parseAttrs = (position: number, attrMax: number, NumBg: number, bufferLoader: BufferLoader): number[][] =>
+  new Array(NumBg)
+    .fill(0)
+    .map((_, y) => new Array(attrMax).fill(0).map((__, x) => bufferLoader(position + 2 * (x + y * attrMax))));
 
 const validateSize = (sizeMap: number, numBg: number, numObj: number): boolean =>
   sizeMap <= 501 || numBg <= 200 || numObj <= 200;

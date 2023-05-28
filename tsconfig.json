@@ -1,12 +1,16 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "commonjs",
+    "module": "esnext",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "strict": true,
-    "target": "es2017",
-    "moduleResolution": "node"
+    "target": "es2020",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
   },
   "include": ["src/**/*.ts"]
 }
